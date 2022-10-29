@@ -4,7 +4,6 @@ import { galleryItems } from './gallery-items.js';
 
 const galleryList = document.querySelector('.gallery');
 const galleryItem = document.querySelector('.gallery__item');
-// const basicLightbox = require('basiclightbox')
 
 const markup = galleryItems.map
     (item => {
@@ -18,7 +17,18 @@ function onGalleryItemClick(e) {
     if (e.target.nodeName !== 'IMG') {
         return
     }
-    
+    const origImage = e.target.dataset.source
+    const instance = basicLightbox.create(`<img src="${origImage}">`)
+    instance.show()
+    const visible = instance.visible()
+    if (visible) {
+        galleryList.addEventListener('keydown', (e) => {
+            console.log(e.code);
+            if (e.code === 'Escape') {
+                instance.close()
+            }
+        })
+    }
 }
 
 galleryList.addEventListener('click', onGalleryItemClick)
